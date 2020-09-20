@@ -21,7 +21,7 @@ namespace ProcessMash
             //Application.ThreadException += Application_ThreadException;
             //AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-            Application.Run(new Settings());
+            Application.Run(new SettingsForm());
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) 

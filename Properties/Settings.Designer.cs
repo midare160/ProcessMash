@@ -22,5 +22,40 @@ namespace ProcessMash.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MinimizeOnStartup {
+            get {
+                return ((bool)(this["MinimizeOnStartup"]));
+            }
+            set {
+                this["MinimizeOnStartup"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Key {
+            get {
+                return ((int)(this["Key"]));
+            }
+            set {
+                this["Key"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public int[] Modifiers {
+            get {
+                return ((int[])(this["Modifiers"]));
+            }
+            set {
+                this["Modifiers"] = value;
+            }
+        }
     }
 }

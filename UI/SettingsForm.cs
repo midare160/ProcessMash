@@ -1,16 +1,17 @@
-﻿using System;
+﻿using ProcessMash.Extensions;
+using ProcessMash.Properties;
+using ProcessMash.Tools;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
 using System.Windows.Forms;
-using ProcessMash.Extensions;
-using ProcessMash.Tools;
 
 namespace ProcessMash.UI
 {
-    public sealed partial class Settings : Form
+    public sealed partial class SettingsForm : Form
     {
         #region Static
         private const string KeyTextBoxPlaceholder = "Press a key";
@@ -26,7 +27,7 @@ namespace ProcessMash.UI
         #endregion
 
         #region Constructors
-        public Settings()
+        public SettingsForm()
         {
             if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Application.ExecutablePath)).Length > 1)
             {
@@ -78,17 +79,18 @@ namespace ProcessMash.UI
 
             switch (RegisterHotKey())
             {
-                case false:
+                case HotkeyRegistered.NotSpecified:
                     SetError();
                     return;
-                case null:
+                case HotkeyRegistered.AlreadyTaken:
                     return;
             }
 
-            Configurations.Modifiers = GetModifierCheckBoxes();
-            Configurations.Key = (int)KeyTextbox.Text.ToKey();
-            Configurations.MinimizeOnStartup = MinimizeCheckbox.Checked;
-            Configurations.Save();
+            Settings.Default.Modifiers = GetModifierCheckBoxes().ToArray();
+            Settings.Default.Key = (int)KeyTextbox.Text.ToKey();
+            Settings.Default.MinimizeOnStartup = MinimizeCheckbox.Checked;
+            Settings.Default.Save();
+            Settings.Default.Reload();
         }
 
         private void ResetButton_Click(object sender, EventArgs e)
@@ -105,7 +107,7 @@ namespace ProcessMash.UI
             CloseForm();
         }
 
-        private void CheckBoxes_CheckedChanged(object sender, EventArgs e) 
+        private void CheckBoxes_CheckedChanged(object sender, EventArgs e)
             => SetChangeFlag(true);
 
         private void KeyTextbox_TextChanged(object sender, EventArgs e)
@@ -173,28 +175,17 @@ namespace ProcessMash.UI
         #region Private Procedures
         private void LoadConfig()
         {
-            try
+            var keyValue = Settings.Default.Key;
+            KeyTextbox.Text = keyValue > 0 ? ((Keys)keyValue).ToString() : KeyTextBoxPlaceholder;
+
+            var modifiers = Settings.Default.Modifiers;
+
+            foreach (CheckBox checkBox in ModifiersGroupBox.Controls)
             {
-                var keyValue = Configurations.Key;
-                KeyTextbox.Text = keyValue.HasValue ? ((Keys) keyValue).ToString() : KeyTextBoxPlaceholder;
-
-                foreach (CheckBox checkBox in ModifiersGroupBox.Controls)
-                {
-                    checkBox.Checked = Configurations.Modifiers.Any(key => key == Convert.ToInt32(checkBox.Tag));
-                }
-
-                MinimizeCheckbox.Checked = Configurations.MinimizeOnStartup;
+                checkBox.Checked = modifiers.Any(key => key == Convert.ToInt32(checkBox.Tag));
             }
-            catch (FormatException)
-            {
-                MessageBox.Show(
-                    "Stop fucking around with config files if you dont know what youre doing!",
-                    "For fucks sake!",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
 
-                Configurations.Reset();
-            }
+            MinimizeCheckbox.Checked = Settings.Default.MinimizeOnStartup;
         }
 
         private void SetChangeFlag(bool changed)
@@ -221,9 +212,9 @@ namespace ProcessMash.UI
             SystemSounds.Asterisk.Play();
         }
 
-        private bool? RegisterHotKey()
+        private HotkeyRegistered RegisterHotKey()
         {
-            if (string.Equals(KeyTextbox.Text, KeyTextBoxPlaceholder)) return false;
+            if (string.Equals(KeyTextbox.Text, KeyTextBoxPlaceholder)) return HotkeyRegistered.NotSpecified;
 
             if (_isRegistered)
             {
@@ -239,13 +230,20 @@ namespace ProcessMash.UI
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
-                return null;
+                return HotkeyRegistered.AlreadyTaken;
             }
 
             SetChangeFlag(false);
             _isRegistered = true;
 
-            return true;
+            return HotkeyRegistered.Success;
+        }
+
+        private enum HotkeyRegistered
+        {
+            Success,
+            AlreadyTaken,
+            NotSpecified
         }
 
         private IEnumerable<int> GetModifierCheckBoxes()
