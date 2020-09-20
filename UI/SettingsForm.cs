@@ -42,7 +42,7 @@ namespace ProcessMash.UI
             }
 
             InitializeComponent();
-            _hotkeys = new Hotkeys(this.GetHashCode(), this.Handle);
+            _hotkeys = new Hotkeys(this.GetHashCode());
 
             // TODO check if started from autostart => minimze
         }
@@ -159,6 +159,9 @@ namespace ProcessMash.UI
             }
         }
 
+        private void TrayNotification_BalloonTipClicked(object sender, EventArgs e) 
+            => this.Show(true);
+
         private void OpenContextMenuItem_Click(object sender, EventArgs e)
             => this.Show(true);
 
@@ -175,17 +178,18 @@ namespace ProcessMash.UI
         #region Private Procedures
         private void LoadConfig()
         {
+            MinimizeCheckbox.Checked = Settings.Default.MinimizeOnStartup;
+
             var keyValue = Settings.Default.Key;
             KeyTextbox.Text = keyValue > 0 ? ((Keys)keyValue).ToString() : KeyTextBoxPlaceholder;
 
             var modifiers = Settings.Default.Modifiers;
+            if (modifiers == null) return;
 
             foreach (CheckBox checkBox in ModifiersGroupBox.Controls)
             {
                 checkBox.Checked = modifiers.Any(key => key == Convert.ToInt32(checkBox.Tag));
             }
-
-            MinimizeCheckbox.Checked = Settings.Default.MinimizeOnStartup;
         }
 
         private void SetChangeFlag(bool changed)
@@ -218,11 +222,11 @@ namespace ProcessMash.UI
 
             if (_isRegistered)
             {
-                _hotkeys.Unregister();
+                _hotkeys.Unregister(this.Handle);
                 _isRegistered = false;
             }
 
-            if (!_hotkeys.Register(GetModifierCheckBoxes().Sum(), (int)KeyTextbox.Text.ToKey()))
+            if (!_hotkeys.Register(this.Handle, GetModifierCheckBoxes().Sum(), (int)KeyTextbox.Text.ToKey()))
             {
                 MessageBox.Show(
                     "Hotkey is already taken by another application!",
@@ -273,7 +277,7 @@ namespace ProcessMash.UI
                 }
             }
 
-            _hotkeys.Unregister();
+            _hotkeys.Unregister(this.Handle);
             Environment.Exit(0);
         }
         #endregion

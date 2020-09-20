@@ -57,7 +57,6 @@
   <ItemGroup>
     <Compile Include="Extensions\FormExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Settings.cs" />
     <Compile Include="Tools\Hotkeys.cs" />
     <Compile Include="Tools\IconExtractor.cs" />
     <Compile Include="Tools\ParentProcessUtilities.cs" />

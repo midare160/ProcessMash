@@ -169,6 +169,7 @@
             this.TrayNotification.ContextMenuStrip = this.TrayContextMenu;
             this.TrayNotification.Text = "End Task-Shortcut";
             this.TrayNotification.Visible = true;
+            this.TrayNotification.BalloonTipClicked += new System.EventHandler(this.TrayNotification_BalloonTipClicked);
             this.TrayNotification.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TrayNotification_MouseClick);
             // 
             // TrayContextMenu

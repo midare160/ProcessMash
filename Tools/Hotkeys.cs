@@ -22,24 +22,20 @@ namespace ProcessMash.Tools
         #endregion
 
         #region Constructors
-        public Hotkeys(int id, IntPtr hWnd)
-        {
-            ID = id;
-            Handle = hWnd;
-        }
+        public Hotkeys(int id) 
+            => ID = id;
         #endregion
 
         #region Properties
         public int ID { get; }
-        public IntPtr Handle { get;  }
         #endregion
 
         #region Methods
-        public bool Register(int fsModifiers, int vlc)
-            => RegisterHotKey(Handle, ID, fsModifiers, vlc);
+        public bool Register(IntPtr handle, int modifiers, int key)
+            => RegisterHotKey(handle, ID, modifiers, key);
 
-        public bool Unregister()
-            => UnregisterHotKey(Handle, ID);
+        public bool Unregister(IntPtr handle)
+            => UnregisterHotKey(handle, ID);
         #endregion
     }
 }
