@@ -41,12 +41,13 @@
             this.TrayNotification = new System.Windows.Forms.NotifyIcon(this.components);
             this.TrayContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.SettingsContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ExitContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExitButton = new System.Windows.Forms.Button();
             this.FormTabControl = new System.Windows.Forms.TabControl();
             this.KeysTabPage = new System.Windows.Forms.TabPage();
             this.OtherTabPage = new System.Windows.Forms.TabPage();
+            this.SecondsUntilKilledNumeric = new System.Windows.Forms.NumericUpDown();
+            this.SecondsUntilKliledLabel = new System.Windows.Forms.Label();
             this.MinimizeCheckbox = new System.Windows.Forms.CheckBox();
             this.AboutTabPage = new System.Windows.Forms.TabPage();
             this.ResetButton = new System.Windows.Forms.Button();
@@ -56,6 +57,7 @@
             this.FormTabControl.SuspendLayout();
             this.KeysTabPage.SuspendLayout();
             this.OtherTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SecondsUntilKilledNumeric)).BeginInit();
             this.SuspendLayout();
             // 
             // KeyTextbox
@@ -65,9 +67,10 @@
             this.KeyTextbox.Name = "KeyTextbox";
             this.KeyTextbox.ReadOnly = true;
             this.KeyTextbox.Size = new System.Drawing.Size(121, 20);
-            this.KeyTextbox.TabIndex = 4;
+            this.KeyTextbox.TabIndex = 2;
             this.KeyTextbox.TabStop = false;
             this.KeyTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.KeyTextbox.WordWrap = false;
             this.KeyTextbox.TextChanged += new System.EventHandler(this.KeyTextbox_TextChanged);
             // 
             // label2
@@ -76,8 +79,8 @@
             this.label2.Location = new System.Drawing.Point(81, 90);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(25, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Key";
+            this.label2.TabIndex = 1;
+            this.label2.Text = "&Key";
             // 
             // SaveButton
             // 
@@ -86,10 +89,9 @@
             this.SaveButton.Location = new System.Drawing.Point(112, 169);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(75, 23);
-            this.SaveButton.TabIndex = 0;
+            this.SaveButton.TabIndex = 1;
             this.SaveButton.TabStop = false;
-            this.SaveButton.Text = "Save";
-            this.SaveButton.UseMnemonic = false;
+            this.SaveButton.Text = "&Save";
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
@@ -109,7 +111,7 @@
             this.ModifiersGroupBox.Location = new System.Drawing.Point(6, 6);
             this.ModifiersGroupBox.Name = "ModifiersGroupBox";
             this.ModifiersGroupBox.Size = new System.Drawing.Size(324, 61);
-            this.ModifiersGroupBox.TabIndex = 6;
+            this.ModifiersGroupBox.TabIndex = 0;
             this.ModifiersGroupBox.TabStop = false;
             this.ModifiersGroupBox.Text = "Modifiers";
             // 
@@ -119,11 +121,12 @@
             this.ShiftCheckBox.Location = new System.Drawing.Point(158, 26);
             this.ShiftCheckBox.Name = "ShiftCheckBox";
             this.ShiftCheckBox.Size = new System.Drawing.Size(47, 17);
-            this.ShiftCheckBox.TabIndex = 3;
+            this.ShiftCheckBox.TabIndex = 2;
+            this.ShiftCheckBox.TabStop = false;
             this.ShiftCheckBox.Tag = "4";
-            this.ShiftCheckBox.Text = "Shift";
+            this.ShiftCheckBox.Text = "S&hift";
             this.ShiftCheckBox.UseVisualStyleBackColor = true;
-            this.ShiftCheckBox.CheckedChanged += new System.EventHandler(this.CheckBoxes_CheckedChanged);
+            this.ShiftCheckBox.CheckedChanged += new System.EventHandler(this.SettingsForm_ValuesChanged);
             // 
             // WinCheckBox
             // 
@@ -131,11 +134,12 @@
             this.WinCheckBox.Location = new System.Drawing.Point(233, 26);
             this.WinCheckBox.Name = "WinCheckBox";
             this.WinCheckBox.Size = new System.Drawing.Size(45, 17);
-            this.WinCheckBox.TabIndex = 2;
+            this.WinCheckBox.TabIndex = 3;
+            this.WinCheckBox.TabStop = false;
             this.WinCheckBox.Tag = "8";
-            this.WinCheckBox.Text = "Win";
+            this.WinCheckBox.Text = "&Win";
             this.WinCheckBox.UseVisualStyleBackColor = true;
-            this.WinCheckBox.CheckedChanged += new System.EventHandler(this.CheckBoxes_CheckedChanged);
+            this.WinCheckBox.CheckedChanged += new System.EventHandler(this.SettingsForm_ValuesChanged);
             // 
             // ControlCheckBox
             // 
@@ -144,10 +148,11 @@
             this.ControlCheckBox.Name = "ControlCheckBox";
             this.ControlCheckBox.Size = new System.Drawing.Size(41, 17);
             this.ControlCheckBox.TabIndex = 1;
+            this.ControlCheckBox.TabStop = false;
             this.ControlCheckBox.Tag = "2";
-            this.ControlCheckBox.Text = "Ctrl";
+            this.ControlCheckBox.Text = "&Ctrl";
             this.ControlCheckBox.UseVisualStyleBackColor = true;
-            this.ControlCheckBox.CheckedChanged += new System.EventHandler(this.CheckBoxes_CheckedChanged);
+            this.ControlCheckBox.CheckedChanged += new System.EventHandler(this.SettingsForm_ValuesChanged);
             // 
             // AltCheckBox
             // 
@@ -156,10 +161,11 @@
             this.AltCheckBox.Name = "AltCheckBox";
             this.AltCheckBox.Size = new System.Drawing.Size(38, 17);
             this.AltCheckBox.TabIndex = 0;
+            this.AltCheckBox.TabStop = false;
             this.AltCheckBox.Tag = "1";
-            this.AltCheckBox.Text = "Alt";
+            this.AltCheckBox.Text = "&Alt";
             this.AltCheckBox.UseVisualStyleBackColor = true;
-            this.AltCheckBox.CheckedChanged += new System.EventHandler(this.CheckBoxes_CheckedChanged);
+            this.AltCheckBox.CheckedChanged += new System.EventHandler(this.SettingsForm_ValuesChanged);
             // 
             // TrayNotification
             // 
@@ -169,7 +175,7 @@
             this.TrayNotification.ContextMenuStrip = this.TrayContextMenu;
             this.TrayNotification.Text = "End Task-Shortcut";
             this.TrayNotification.Visible = true;
-            this.TrayNotification.BalloonTipClicked += new System.EventHandler(this.TrayNotification_BalloonTipClicked);
+            this.TrayNotification.BalloonTipClicked += new System.EventHandler(this.TrayNotification_BalloonTipClicked_SettingsContextMenuItem_Click);
             this.TrayNotification.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TrayNotification_MouseClick);
             // 
             // TrayContextMenu
@@ -177,28 +183,21 @@
             this.TrayContextMenu.ImageScalingSize = new System.Drawing.Size(30, 16);
             this.TrayContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SettingsContextMenuItem,
-            this.toolStripSeparator1,
             this.ExitContextMenuItem});
             this.TrayContextMenu.Name = "TrayContextMenu";
-            this.TrayContextMenu.ShowImageMargin = false;
-            this.TrayContextMenu.Size = new System.Drawing.Size(92, 54);
+            this.TrayContextMenu.Size = new System.Drawing.Size(117, 48);
             // 
             // SettingsContextMenuItem
             // 
             this.SettingsContextMenuItem.Name = "SettingsContextMenuItem";
-            this.SettingsContextMenuItem.Size = new System.Drawing.Size(91, 22);
+            this.SettingsContextMenuItem.Size = new System.Drawing.Size(116, 22);
             this.SettingsContextMenuItem.Text = "Settings";
-            this.SettingsContextMenuItem.Click += new System.EventHandler(this.OpenContextMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(88, 6);
+            this.SettingsContextMenuItem.Click += new System.EventHandler(this.TrayNotification_BalloonTipClicked_SettingsContextMenuItem_Click);
             // 
             // ExitContextMenuItem
             // 
             this.ExitContextMenuItem.Name = "ExitContextMenuItem";
-            this.ExitContextMenuItem.Size = new System.Drawing.Size(91, 22);
+            this.ExitContextMenuItem.Size = new System.Drawing.Size(116, 22);
             this.ExitContextMenuItem.Text = "Exit";
             this.ExitContextMenuItem.Click += new System.EventHandler(this.ExitContextMenuItem_Click);
             // 
@@ -208,9 +207,9 @@
             this.ExitButton.Location = new System.Drawing.Point(274, 169);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(75, 23);
-            this.ExitButton.TabIndex = 5;
+            this.ExitButton.TabIndex = 3;
             this.ExitButton.TabStop = false;
-            this.ExitButton.Text = "Exit";
+            this.ExitButton.Text = "&Exit";
             this.ExitButton.UseVisualStyleBackColor = true;
             this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
             // 
@@ -224,7 +223,7 @@
             this.FormTabControl.Name = "FormTabControl";
             this.FormTabControl.SelectedIndex = 0;
             this.FormTabControl.Size = new System.Drawing.Size(344, 153);
-            this.FormTabControl.TabIndex = 7;
+            this.FormTabControl.TabIndex = 0;
             // 
             // KeysTabPage
             // 
@@ -241,6 +240,8 @@
             // 
             // OtherTabPage
             // 
+            this.OtherTabPage.Controls.Add(this.SecondsUntilKilledNumeric);
+            this.OtherTabPage.Controls.Add(this.SecondsUntilKliledLabel);
             this.OtherTabPage.Controls.Add(this.MinimizeCheckbox);
             this.OtherTabPage.Location = new System.Drawing.Point(4, 22);
             this.OtherTabPage.Name = "OtherTabPage";
@@ -250,6 +251,34 @@
             this.OtherTabPage.Text = "Other";
             this.OtherTabPage.UseVisualStyleBackColor = true;
             // 
+            // SecondsUntilKilledNumeric
+            // 
+            this.SecondsUntilKilledNumeric.Location = new System.Drawing.Point(15, 42);
+            this.SecondsUntilKilledNumeric.Maximum = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            this.SecondsUntilKilledNumeric.Name = "SecondsUntilKilledNumeric";
+            this.SecondsUntilKilledNumeric.Size = new System.Drawing.Size(34, 20);
+            this.SecondsUntilKilledNumeric.TabIndex = 4;
+            this.SecondsUntilKilledNumeric.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.SecondsUntilKilledNumeric.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.SecondsUntilKilledNumeric.ValueChanged += new System.EventHandler(this.SettingsForm_ValuesChanged);
+            // 
+            // SecondsUntilKliledLabel
+            // 
+            this.SecondsUntilKliledLabel.AutoSize = true;
+            this.SecondsUntilKliledLabel.Location = new System.Drawing.Point(51, 44);
+            this.SecondsUntilKliledLabel.Name = "SecondsUntilKliledLabel";
+            this.SecondsUntilKliledLabel.Size = new System.Drawing.Size(180, 13);
+            this.SecondsUntilKliledLabel.TabIndex = 3;
+            this.SecondsUntilKliledLabel.Text = "seconds to wait until process is killed";
+            // 
             // MinimizeCheckbox
             // 
             this.MinimizeCheckbox.AutoSize = true;
@@ -257,9 +286,9 @@
             this.MinimizeCheckbox.Name = "MinimizeCheckbox";
             this.MinimizeCheckbox.Size = new System.Drawing.Size(116, 17);
             this.MinimizeCheckbox.TabIndex = 2;
-            this.MinimizeCheckbox.Text = "Minimize on startup";
+            this.MinimizeCheckbox.Text = "&Minimize on startup";
             this.MinimizeCheckbox.UseVisualStyleBackColor = true;
-            this.MinimizeCheckbox.CheckedChanged += new System.EventHandler(this.CheckBoxes_CheckedChanged);
+            this.MinimizeCheckbox.CheckedChanged += new System.EventHandler(this.SettingsForm_ValuesChanged);
             // 
             // AboutTabPage
             // 
@@ -277,8 +306,9 @@
             this.ResetButton.Location = new System.Drawing.Point(193, 169);
             this.ResetButton.Name = "ResetButton";
             this.ResetButton.Size = new System.Drawing.Size(75, 23);
-            this.ResetButton.TabIndex = 8;
-            this.ResetButton.Text = "Reset";
+            this.ResetButton.TabIndex = 2;
+            this.ResetButton.TabStop = false;
+            this.ResetButton.Text = "&Reset";
             this.ResetButton.UseVisualStyleBackColor = true;
             this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
             // 
@@ -297,7 +327,7 @@
             this.MaximizeBox = false;
             this.Name = "SettingsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Settings";
+            this.Text = "ProcessMash - Settings";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Settings_FormClosing);
             this.Load += new System.EventHandler(this.Settings_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Settings_KeyDown);
@@ -311,6 +341,7 @@
             this.KeysTabPage.PerformLayout();
             this.OtherTabPage.ResumeLayout(false);
             this.OtherTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SecondsUntilKilledNumeric)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -330,13 +361,14 @@
         private System.Windows.Forms.ContextMenuStrip TrayContextMenu;
         private System.Windows.Forms.ToolStripMenuItem SettingsContextMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExitContextMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.TabControl FormTabControl;
         private System.Windows.Forms.TabPage KeysTabPage;
         private System.Windows.Forms.TabPage OtherTabPage;
         private System.Windows.Forms.TabPage AboutTabPage;
         private System.Windows.Forms.Button ResetButton;
         private System.Windows.Forms.CheckBox MinimizeCheckbox;
+        private System.Windows.Forms.NumericUpDown SecondsUntilKilledNumeric;
+        private System.Windows.Forms.Label SecondsUntilKliledLabel;
     }
 }
 

@@ -57,5 +57,17 @@ namespace ProcessMash.Properties {
                 this["Modifiers"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal SecondsUntilKilled {
+            get {
+                return ((decimal)(this["SecondsUntilKilled"]));
+            }
+            set {
+                this["SecondsUntilKilled"] = value;
+            }
+        }
     }
 }

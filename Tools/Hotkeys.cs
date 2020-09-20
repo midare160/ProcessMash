@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace ProcessMash.Tools
 {
@@ -14,7 +15,7 @@ namespace ProcessMash.Tools
         /// <param name="fsModifiers">Modifier key codes: Alt = 1, Ctrl = 2, Shift = 4, Win = 8.
         /// <para>Compute the addition of each combination of the keys you want to be pressed:</para>
         /// ALT+CTRL = 1 + 2 = 3 , CTRL+SHIFT = 2 + 4 = 6...</param>
-        /// <param name="vlc">Key that should be pressed. <see cref="Keys"/> can be cast with <see cref="int"/></param>
+        /// <param name="vlc">Key that should be pressed. <see cref="Keys"/> can be cast with <see cref="int"/>.</param>
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
         [DllImport("user32.dll")]

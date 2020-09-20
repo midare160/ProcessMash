@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Windows.Forms;
+using ProcessMash.ContextMenu;
 
 namespace ProcessMash.UI
 {
@@ -51,6 +52,13 @@ namespace ProcessMash.UI
         #region Events
         private void Settings_Load(object sender, EventArgs e)
         {
+            // TODO extract and save in "Images" folder
+            this.Icon = IconExtractor.Extract("imageres.dll", 228, true); // two spinning blue arrows
+            TextBoxErrorProvider.Icon = IconExtractor.Extract("imageres.dll", 93, false); // red circle with white cross
+            TrayNotification.Icon = IconExtractor.Extract("shell32.dll", 152, false); // white task list with red cross in bottom right corner
+
+            TrayContextMenu.Renderer = new ContextMenuRenderer();
+
             try
             {
                 _changeIntern = true;
@@ -67,10 +75,6 @@ namespace ProcessMash.UI
             {
                 MoveToTray();
             }
-
-            this.Icon = IconExtractor.Extract("imageres.dll", 228, true); // two spinning blue arrows
-            TextBoxErrorProvider.Icon = IconExtractor.Extract("imageres.dll", 93, false); // red circle with white cross
-            TrayNotification.Icon = IconExtractor.Extract("shell32.dll", 152, false); // white task list with red cross in bottom right corner
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
@@ -79,16 +83,22 @@ namespace ProcessMash.UI
 
             switch (RegisterHotKey())
             {
+                case HotkeyRegistered.Success:
+                    SetChangeFlag(false);
+                    break;
                 case HotkeyRegistered.NotSpecified:
                     SetError();
                     return;
                 case HotkeyRegistered.AlreadyTaken:
                     return;
+                default:
+                    throw new NotImplementedException();
             }
 
             Settings.Default.Modifiers = GetModifierCheckBoxes().ToArray();
             Settings.Default.Key = (int)KeyTextbox.Text.ToKey();
             Settings.Default.MinimizeOnStartup = MinimizeCheckbox.Checked;
+            Settings.Default.SecondsUntilKilled = SecondsUntilKilledNumeric.Value;
             Settings.Default.Save();
             Settings.Default.Reload();
         }
@@ -107,7 +117,7 @@ namespace ProcessMash.UI
             CloseForm();
         }
 
-        private void CheckBoxes_CheckedChanged(object sender, EventArgs e)
+        private void SettingsForm_ValuesChanged(object sender, EventArgs e)
             => SetChangeFlag(true);
 
         private void KeyTextbox_TextChanged(object sender, EventArgs e)
@@ -159,10 +169,7 @@ namespace ProcessMash.UI
             }
         }
 
-        private void TrayNotification_BalloonTipClicked(object sender, EventArgs e) 
-            => this.Show(true);
-
-        private void OpenContextMenuItem_Click(object sender, EventArgs e)
+        private void TrayNotification_BalloonTipClicked_SettingsContextMenuItem_Click(object sender, EventArgs e)
             => this.Show(true);
 
         private void ExitContextMenuItem_Click(object sender, EventArgs e)
@@ -179,6 +186,7 @@ namespace ProcessMash.UI
         private void LoadConfig()
         {
             MinimizeCheckbox.Checked = Settings.Default.MinimizeOnStartup;
+            SecondsUntilKilledNumeric.Value = Settings.Default.SecondsUntilKilled;
 
             var keyValue = Settings.Default.Key;
             KeyTextbox.Text = keyValue > 0 ? ((Keys)keyValue).ToString() : KeyTextBoxPlaceholder;
@@ -199,6 +207,9 @@ namespace ProcessMash.UI
             _changed = changed;
             SaveButton.Enabled = changed;
             ResetButton.Enabled = changed;
+
+            var changedText = _changed ? "*" : null;
+            this.Text = $"{changedText}{Application.ProductName} - Settings";
         }
 
         private void MoveToTray()
@@ -209,8 +220,8 @@ namespace ProcessMash.UI
 
         private void SetError()
         {
-            TextBoxErrorProvider.SetError(KeyTextbox, "Please specify a key!");
             FormTabControl.SelectTab(KeysTabPage);
+            TextBoxErrorProvider.SetError(KeyTextbox, "Please specify a key!");
             this.ActiveControl = KeyTextbox;
 
             SystemSounds.Asterisk.Play();
@@ -237,17 +248,9 @@ namespace ProcessMash.UI
                 return HotkeyRegistered.AlreadyTaken;
             }
 
-            SetChangeFlag(false);
             _isRegistered = true;
 
             return HotkeyRegistered.Success;
-        }
-
-        private enum HotkeyRegistered
-        {
-            Success,
-            AlreadyTaken,
-            NotSpecified
         }
 
         private IEnumerable<int> GetModifierCheckBoxes()
@@ -266,12 +269,12 @@ namespace ProcessMash.UI
             if (_changed)
             {
                 var dialogResult = MessageBox.Show(
-                    "Do you really want to exit? You will loose all unsaved changes.",
+                    "Do you really want to exit? All unsaved changes will be lost.",
                     "Are you sure?",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
 
-                if (dialogResult != DialogResult.Yes)
+                if (dialogResult == DialogResult.No)
                 {
                     return;
                 }
@@ -289,11 +292,18 @@ namespace ProcessMash.UI
             {
                 foreach (var process in Process.GetProcessesByName(Window.GetActiveProcessFileName()))
                 {
-                    process.Destroy();
+                    // bring back parent process from git and only destroy that = sub processes take long time
+                    process.Destroy(SecondsUntilKilledNumeric.Value);
                 }
             }
 
             base.WndProc(ref msg);
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            RegisterHotKey();
+            base.OnHandleCreated(e);
         }
         #endregion
     }

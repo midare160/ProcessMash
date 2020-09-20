@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ProcessMash.UI;
+using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using ProcessMash.UI;
 
 namespace ProcessMash
 {
@@ -20,6 +20,8 @@ namespace ProcessMash
 
             //Application.ThreadException += Application_ThreadException;
             //AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            // TODO enable event handlers
 
             Application.Run(new SettingsForm());
         }
