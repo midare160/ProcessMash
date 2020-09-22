@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using ProcessMash.Tools;
 
 namespace ProcessMash
 {
@@ -27,16 +28,9 @@ namespace ProcessMash
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) 
-            => LogException((Exception)e.ExceptionObject);
+            => Logger.LogException((Exception)e.ExceptionObject);
 
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e) 
-            => LogException(e.Exception);
-
-        private static void LogException(Exception exception)
-        {
-            var exceptionString = $"[{DateTime.Now}] {exception.ToString().Replace("\r\n", null)}\r\n";
-
-            File.AppendAllText(Path.Combine(Application.StartupPath, "error.log"), exceptionString);
-        }
+            => Logger.LogException(e.Exception);
     }
 }

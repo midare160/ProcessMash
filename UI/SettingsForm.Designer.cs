@@ -261,7 +261,7 @@
             0});
             this.SecondsUntilKilledNumeric.Name = "SecondsUntilKilledNumeric";
             this.SecondsUntilKilledNumeric.Size = new System.Drawing.Size(34, 20);
-            this.SecondsUntilKilledNumeric.TabIndex = 4;
+            this.SecondsUntilKilledNumeric.TabIndex = 2;
             this.SecondsUntilKilledNumeric.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.SecondsUntilKilledNumeric.Value = new decimal(new int[] {
             5,
@@ -269,6 +269,7 @@
             0,
             0});
             this.SecondsUntilKilledNumeric.ValueChanged += new System.EventHandler(this.SettingsForm_ValuesChanged);
+            this.SecondsUntilKilledNumeric.Enter += new System.EventHandler(this.SecondsUntilKilledNumeric_Enter);
             // 
             // SecondsUntilKliledLabel
             // 
@@ -276,8 +277,8 @@
             this.SecondsUntilKliledLabel.Location = new System.Drawing.Point(51, 44);
             this.SecondsUntilKliledLabel.Name = "SecondsUntilKliledLabel";
             this.SecondsUntilKliledLabel.Size = new System.Drawing.Size(180, 13);
-            this.SecondsUntilKliledLabel.TabIndex = 3;
-            this.SecondsUntilKliledLabel.Text = "seconds to wait until process is killed";
+            this.SecondsUntilKliledLabel.TabIndex = 1;
+            this.SecondsUntilKliledLabel.Text = "seconds to &wait until process is killed";
             // 
             // MinimizeCheckbox
             // 
@@ -285,7 +286,7 @@
             this.MinimizeCheckbox.Location = new System.Drawing.Point(15, 19);
             this.MinimizeCheckbox.Name = "MinimizeCheckbox";
             this.MinimizeCheckbox.Size = new System.Drawing.Size(116, 17);
-            this.MinimizeCheckbox.TabIndex = 2;
+            this.MinimizeCheckbox.TabIndex = 0;
             this.MinimizeCheckbox.Text = "&Minimize on startup";
             this.MinimizeCheckbox.UseVisualStyleBackColor = true;
             this.MinimizeCheckbox.CheckedChanged += new System.EventHandler(this.SettingsForm_ValuesChanged);
@@ -328,10 +329,10 @@
             this.Name = "SettingsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ProcessMash - Settings";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Settings_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SettingsForm_FormClosing);
             this.Load += new System.EventHandler(this.Settings_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Settings_KeyDown);
-            this.Resize += new System.EventHandler(this.Settings_Resize);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SettingsForm_KeyDown);
+            this.Resize += new System.EventHandler(this.SettingsForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.TextBoxErrorProvider)).EndInit();
             this.ModifiersGroupBox.ResumeLayout(false);
             this.ModifiersGroupBox.PerformLayout();

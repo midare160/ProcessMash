@@ -1,14 +1,15 @@
-﻿using ProcessMash.Extensions;
+﻿using ProcessMash.ContextMenu;
+using ProcessMash.Extensions;
 using ProcessMash.Properties;
 using ProcessMash.Tools;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
 using System.Windows.Forms;
-using ProcessMash.ContextMenu;
 
 namespace ProcessMash.UI
 {
@@ -30,20 +31,10 @@ namespace ProcessMash.UI
         #region Constructors
         public SettingsForm()
         {
-            if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Application.ExecutablePath)).Length > 1)
-            {
-                MessageBox.Show(
-                    "Application is already running!",
-                    "Error!",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
-                // 1056 = "An instance of the service is already running." src: https://bit.ly/2FDDWds
-                Environment.Exit(1056);
-            }
-
             InitializeComponent();
+
             _hotkeys = new Hotkeys(this.GetHashCode());
+            TrayContextMenu.Renderer = new ContextMenuRenderer();
 
             // TODO check if started from autostart => minimze
         }
@@ -57,7 +48,7 @@ namespace ProcessMash.UI
             TextBoxErrorProvider.Icon = IconExtractor.Extract("imageres.dll", 93, false); // red circle with white cross
             TrayNotification.Icon = IconExtractor.Extract("shell32.dll", 152, false); // white task list with red cross in bottom right corner
 
-            TrayContextMenu.Renderer = new ContextMenuRenderer();
+            CheckIfAlreadyRunning();
 
             try
             {
@@ -92,7 +83,7 @@ namespace ProcessMash.UI
                 case HotkeyRegistered.AlreadyTaken:
                     return;
                 default:
-                    throw new NotImplementedException();
+                    throw new InvalidEnumArgumentException();
             }
 
             Settings.Default.Modifiers = GetModifierCheckBoxes().ToArray();
@@ -117,9 +108,6 @@ namespace ProcessMash.UI
             CloseForm();
         }
 
-        private void SettingsForm_ValuesChanged(object sender, EventArgs e)
-            => SetChangeFlag(true);
-
         private void KeyTextbox_TextChanged(object sender, EventArgs e)
         {
             TextBoxErrorProvider.Clear();
@@ -128,7 +116,13 @@ namespace ProcessMash.UI
             SetChangeFlag(true);
         }
 
-        private void Settings_KeyDown(object sender, KeyEventArgs e)
+        private void SecondsUntilKilledNumeric_Enter(object sender, EventArgs e)
+            => SecondsUntilKilledNumeric.Select(0, SecondsUntilKilledNumeric.Text.Length);
+
+        private void SettingsForm_ValuesChanged(object sender, EventArgs e)
+            => SetChangeFlag(true);
+
+        private void SettingsForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (this.ActiveControl == KeyTextbox)
             {
@@ -136,17 +130,14 @@ namespace ProcessMash.UI
                 {
                     KeyTextbox.Text = e.KeyCode.ToString();
                 }
-
-                return;
             }
-
-            if (e.KeyCode == Keys.Escape)
+            else if (e.KeyCode == Keys.Escape)
             {
                 this.Close();
             }
         }
 
-        private void Settings_Resize(object sender, EventArgs e)
+        private void SettingsForm_Resize(object sender, EventArgs e)
         {
             if (this.WindowState != FormWindowState.Minimized || !_moveToTray) return;
 
@@ -159,6 +150,12 @@ namespace ProcessMash.UI
             }
 
             this.Hide(false);
+        }
+
+        private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            MoveToTray();
         }
 
         private void TrayNotification_MouseClick(object sender, MouseEventArgs e)
@@ -174,15 +171,23 @@ namespace ProcessMash.UI
 
         private void ExitContextMenuItem_Click(object sender, EventArgs e)
             => CloseForm();
-
-        private void Settings_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = true;
-            MoveToTray();
-        }
         #endregion
 
         #region Private Procedures
+        private void CheckIfAlreadyRunning()
+        {
+            if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Application.ExecutablePath)).Length > 1)
+            {
+                MessageBox.Show(
+                    "Application is already running!",
+                    "Error!",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                this.Dispose();
+            }
+        }
+
         private void LoadConfig()
         {
             MinimizeCheckbox.Checked = Settings.Default.MinimizeOnStartup;
@@ -212,12 +217,6 @@ namespace ProcessMash.UI
             this.Text = $"{changedText}{Application.ProductName} - Settings";
         }
 
-        private void MoveToTray()
-        {
-            _moveToTray = true;
-            this.WindowState = FormWindowState.Minimized;
-        }
-
         private void SetError()
         {
             FormTabControl.SelectTab(KeysTabPage);
@@ -225,6 +224,12 @@ namespace ProcessMash.UI
             this.ActiveControl = KeyTextbox;
 
             SystemSounds.Asterisk.Play();
+        }
+
+        private void MoveToTray()
+        {
+            _moveToTray = true;
+            this.WindowState = FormWindowState.Minimized;
         }
 
         private HotkeyRegistered RegisterHotKey()
@@ -281,7 +286,7 @@ namespace ProcessMash.UI
             }
 
             _hotkeys.Unregister(this.Handle);
-            Environment.Exit(0);
+            this.Dispose();
         }
         #endregion
 
@@ -292,7 +297,7 @@ namespace ProcessMash.UI
             {
                 foreach (var process in Process.GetProcessesByName(Window.GetActiveProcessFileName()))
                 {
-                    // bring back parent process from git and only destroy that = sub processes take long time
+                    // TODO bring back parent process from git and only destroy that = sub processes take long time
                     process.Destroy(SecondsUntilKilledNumeric.Value);
                 }
             }

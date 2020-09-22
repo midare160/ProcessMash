@@ -7,7 +7,7 @@ namespace ProcessMash.Extensions
 {
     public static class ProcessExtensions
     {
-        public static void Destroy(this Process process, decimal secondsUntilKilled)
+        public static void Destroy(this Process process, decimal secondsUntilKilled = default)
         {
             try
             {
