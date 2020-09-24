@@ -1,14 +1,14 @@
-﻿using ProcessMash.UI;
+﻿using NLog;
+using ProcessMash.UI;
 using System;
-using System.IO;
-using System.Threading;
 using System.Windows.Forms;
-using ProcessMash.Tools;
 
 namespace ProcessMash
 {
     internal static class Program
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -17,20 +17,13 @@ namespace ProcessMash
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-
-            //Application.ThreadException += Application_ThreadException;
-            //AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 
             // TODO enable event handlers
+            Application.ThreadException += (s, e) => Logger.Error(e.Exception);
+            AppDomain.CurrentDomain.UnhandledException += (s, e) => Logger.Error((Exception)e.ExceptionObject);
 
             Application.Run(new SettingsForm());
         }
-
-        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) 
-            => Logger.LogException((Exception)e.ExceptionObject);
-
-        private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e) 
-            => Logger.LogException(e.Exception);
     }
 }

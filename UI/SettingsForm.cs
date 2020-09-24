@@ -40,6 +40,28 @@ namespace ProcessMash.UI
         }
         #endregion
 
+        #region Overrides
+        protected override void WndProc(ref Message msg)
+        {
+            if (msg.Msg == 0x0312 && msg.WParam.ToInt32() == _hotkeys.ID)
+            {
+                foreach (var process in Process.GetProcessesByName(Window.GetActiveProcessFileName()))
+                {
+                    // TODO bring back parent process from git and only destroy that = sub processes take long time
+                    process.Destroy(SecondsUntilKilledNumeric.Value);
+                }
+            }
+
+            base.WndProc(ref msg);
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            RegisterHotKey();
+            base.OnHandleCreated(e);
+        }
+        #endregion
+
         #region Events
         private void Settings_Load(object sender, EventArgs e)
         {
@@ -62,10 +84,7 @@ namespace ProcessMash.UI
                 _changeIntern = false;
             }
 
-            if (MinimizeCheckbox.Checked)
-            {
-                MoveToTray();
-            }
+            if (MinimizeCheckbox.Checked) MoveToTray();
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
@@ -287,28 +306,6 @@ namespace ProcessMash.UI
 
             _hotkeys.Unregister(this.Handle);
             this.Dispose();
-        }
-        #endregion
-
-        #region Overrides
-        protected override void WndProc(ref Message msg)
-        {
-            if (msg.Msg == 0x0312 && msg.WParam.ToInt32() == _hotkeys.ID)
-            {
-                foreach (var process in Process.GetProcessesByName(Window.GetActiveProcessFileName()))
-                {
-                    // TODO bring back parent process from git and only destroy that = sub processes take long time
-                    process.Destroy(SecondsUntilKilledNumeric.Value);
-                }
-            }
-
-            base.WndProc(ref msg);
-        }
-
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            RegisterHotKey();
-            base.OnHandleCreated(e);
         }
         #endregion
     }

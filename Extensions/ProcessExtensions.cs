@@ -30,6 +30,7 @@ namespace ProcessMash.Extensions
             catch (Win32Exception)
             {
                 SystemSounds.Asterisk.Play();
+                throw;
             }
         }
     }
