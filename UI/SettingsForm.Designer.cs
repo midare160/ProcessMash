@@ -1,4 +1,6 @@
-﻿namespace ProcessMash.UI
+﻿using System.Windows.Forms;
+
+namespace ProcessMash.UI
 {
     sealed partial class SettingsForm
     {
@@ -17,6 +19,7 @@
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
@@ -29,8 +32,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.KeyTextbox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.KeyLabel = new System.Windows.Forms.Label();
             this.SaveButton = new System.Windows.Forms.Button();
             this.TextBoxErrorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.ModifiersGroupBox = new System.Windows.Forms.GroupBox();
@@ -69,18 +73,19 @@
             this.KeyTextbox.Size = new System.Drawing.Size(121, 20);
             this.KeyTextbox.TabIndex = 2;
             this.KeyTextbox.TabStop = false;
+            this.KeyTextbox.Text = "Press a key!";
             this.KeyTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.KeyTextbox.WordWrap = false;
             this.KeyTextbox.TextChanged += new System.EventHandler(this.KeyTextbox_TextChanged);
             // 
-            // label2
+            // KeyLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(81, 90);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(25, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "&Key";
+            this.KeyLabel.AutoSize = true;
+            this.KeyLabel.Location = new System.Drawing.Point(81, 90);
+            this.KeyLabel.Name = "KeyLabel";
+            this.KeyLabel.Size = new System.Drawing.Size(25, 13);
+            this.KeyLabel.TabIndex = 1;
+            this.KeyLabel.Text = "&Key";
             // 
             // SaveButton
             // 
@@ -99,6 +104,7 @@
             // 
             this.TextBoxErrorProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
             this.TextBoxErrorProvider.ContainerControl = this;
+            this.TextBoxErrorProvider.Icon = ((System.Drawing.Icon)(resources.GetObject("TextBoxErrorProvider.Icon")));
             // 
             // ModifiersGroupBox
             // 
@@ -113,7 +119,7 @@
             this.ModifiersGroupBox.Size = new System.Drawing.Size(324, 61);
             this.ModifiersGroupBox.TabIndex = 0;
             this.ModifiersGroupBox.TabStop = false;
-            this.ModifiersGroupBox.Text = "Modifiers";
+            this.ModifiersGroupBox.Text = "&Modifiers";
             // 
             // ShiftCheckBox
             // 
@@ -173,7 +179,8 @@
             this.TrayNotification.BalloonTipText = "Click to open settings";
             this.TrayNotification.BalloonTipTitle = "Minimized to taskbar";
             this.TrayNotification.ContextMenuStrip = this.TrayContextMenu;
-            this.TrayNotification.Text = "End Task-Shortcut";
+            this.TrayNotification.Icon = ((System.Drawing.Icon)(resources.GetObject("TrayNotification.Icon")));
+            this.TrayNotification.Text = "ProcessMash";
             this.TrayNotification.Visible = true;
             this.TrayNotification.BalloonTipClicked += new System.EventHandler(this.TrayNotification_BalloonTipClicked_SettingsContextMenuItem_Click);
             this.TrayNotification.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TrayNotification_MouseClick);
@@ -189,6 +196,7 @@
             // 
             // SettingsContextMenuItem
             // 
+            this.SettingsContextMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.SettingsContextMenuItem.Name = "SettingsContextMenuItem";
             this.SettingsContextMenuItem.Size = new System.Drawing.Size(116, 22);
             this.SettingsContextMenuItem.Text = "Settings";
@@ -196,6 +204,7 @@
             // 
             // ExitContextMenuItem
             // 
+            this.ExitContextMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.ExitContextMenuItem.Name = "ExitContextMenuItem";
             this.ExitContextMenuItem.Size = new System.Drawing.Size(116, 22);
             this.ExitContextMenuItem.Text = "Exit";
@@ -224,12 +233,13 @@
             this.FormTabControl.SelectedIndex = 0;
             this.FormTabControl.Size = new System.Drawing.Size(344, 153);
             this.FormTabControl.TabIndex = 0;
+            this.FormTabControl.TabStop = false;
             // 
             // KeysTabPage
             // 
             this.KeysTabPage.Controls.Add(this.ModifiersGroupBox);
             this.KeysTabPage.Controls.Add(this.KeyTextbox);
-            this.KeysTabPage.Controls.Add(this.label2);
+            this.KeysTabPage.Controls.Add(this.KeyLabel);
             this.KeysTabPage.Location = new System.Drawing.Point(4, 22);
             this.KeysTabPage.Name = "KeysTabPage";
             this.KeysTabPage.Padding = new System.Windows.Forms.Padding(3);
@@ -324,6 +334,7 @@
             this.Controls.Add(this.SaveButton);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "SettingsForm";
@@ -349,7 +360,7 @@
 
         #endregion
         private System.Windows.Forms.TextBox KeyTextbox;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label KeyLabel;
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.ErrorProvider TextBoxErrorProvider;
         private System.Windows.Forms.GroupBox ModifiersGroupBox;
@@ -372,4 +383,3 @@
         private System.Windows.Forms.Label SecondsUntilKliledLabel;
     }
 }
-

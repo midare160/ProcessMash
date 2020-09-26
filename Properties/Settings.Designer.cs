@@ -25,13 +25,12 @@ namespace ProcessMash.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool MinimizeOnStartup {
+        public int[] Modifiers {
             get {
-                return ((bool)(this["MinimizeOnStartup"]));
+                return ((int[])(this["Modifiers"]));
             }
             set {
-                this["MinimizeOnStartup"] = value;
+                this["Modifiers"] = value;
             }
         }
         
@@ -49,21 +48,22 @@ namespace ProcessMash.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public int[] Modifiers {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MinimizeOnStartup {
             get {
-                return ((int[])(this["Modifiers"]));
+                return ((bool)(this["MinimizeOnStartup"]));
             }
             set {
-                this["Modifiers"] = value;
+                this["MinimizeOnStartup"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public decimal SecondsUntilKilled {
+        public int SecondsUntilKilled {
             get {
-                return ((decimal)(this["SecondsUntilKilled"]));
+                return ((int)(this["SecondsUntilKilled"]));
             }
             set {
                 this["SecondsUntilKilled"] = value;

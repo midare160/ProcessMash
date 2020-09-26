@@ -1,4 +1,4 @@
-﻿namespace ProcessMash
+﻿namespace ProcessMash.Tools
 {
     public enum HotkeyRegistered
     {

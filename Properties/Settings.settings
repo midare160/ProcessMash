@@ -2,16 +2,16 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ProcessMash.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="MinimizeOnStartup" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+    <Setting Name="Modifiers" Type="System.Int32[]" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Key" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="Modifiers" Type="System.Int32[]" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="MinimizeOnStartup" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="SecondsUntilKilled" Type="System.Decimal" Scope="User">
+    <Setting Name="SecondsUntilKilled" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>

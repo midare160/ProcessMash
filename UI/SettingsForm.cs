@@ -35,8 +35,6 @@ namespace ProcessMash.UI
 
             _hotkeys = new Hotkeys(this.GetHashCode());
             TrayContextMenu.Renderer = new ContextMenuRenderer();
-
-            // TODO check if started from autostart => minimze
         }
         #endregion
 
@@ -45,11 +43,7 @@ namespace ProcessMash.UI
         {
             if (msg.Msg == 0x0312 && msg.WParam.ToInt32() == _hotkeys.ID)
             {
-                foreach (var process in Process.GetProcessesByName(Window.GetActiveProcessFileName()))
-                {
-                    // TODO bring back parent process from git and only destroy that = sub processes take long time
-                    process.Destroy(SecondsUntilKilledNumeric.Value);
-                }
+                Window.GetActiveProcess().Destroy((int)SecondsUntilKilledNumeric.Value);
             }
 
             base.WndProc(ref msg);
@@ -65,11 +59,6 @@ namespace ProcessMash.UI
         #region Events
         private void Settings_Load(object sender, EventArgs e)
         {
-            // TODO extract and save in "Images" folder
-            this.Icon = IconExtractor.Extract("imageres.dll", 228, true); // two spinning blue arrows
-            TextBoxErrorProvider.Icon = IconExtractor.Extract("imageres.dll", 93, false); // red circle with white cross
-            TrayNotification.Icon = IconExtractor.Extract("shell32.dll", 152, false); // white task list with red cross in bottom right corner
-
             CheckIfAlreadyRunning();
 
             try
@@ -108,7 +97,7 @@ namespace ProcessMash.UI
             Settings.Default.Modifiers = GetModifierCheckBoxes().ToArray();
             Settings.Default.Key = (int)KeyTextbox.Text.ToKey();
             Settings.Default.MinimizeOnStartup = MinimizeCheckbox.Checked;
-            Settings.Default.SecondsUntilKilled = SecondsUntilKilledNumeric.Value;
+            Settings.Default.SecondsUntilKilled = (int)SecondsUntilKilledNumeric.Value;
             Settings.Default.Save();
             Settings.Default.Reload();
         }
@@ -203,7 +192,7 @@ namespace ProcessMash.UI
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
-                this.Dispose();
+                this.Dispose(true);
             }
         }
 
@@ -305,7 +294,7 @@ namespace ProcessMash.UI
             }
 
             _hotkeys.Unregister(this.Handle);
-            this.Dispose();
+            this.Dispose(true);
         }
         #endregion
     }

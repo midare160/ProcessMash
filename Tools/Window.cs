@@ -11,11 +11,11 @@ namespace ProcessMash.Tools
         [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
 
-        public static string GetActiveProcessFileName()
+        public static Process GetActiveProcess()
         {
             GetWindowThreadProcessId(GetForegroundWindow(), out var pid);
 
-            return Process.GetProcessById((int)pid).ProcessName;
+            return Process.GetProcessById((int)pid);
         }
     }
 }
