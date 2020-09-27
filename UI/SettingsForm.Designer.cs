@@ -54,7 +54,11 @@ namespace ProcessMash.UI
             this.SecondsUntilKliledLabel = new System.Windows.Forms.Label();
             this.MinimizeCheckbox = new System.Windows.Forms.CheckBox();
             this.AboutTabPage = new System.Windows.Forms.TabPage();
+            this.GithubLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.CreatorLabel = new System.Windows.Forms.Label();
+            this.VersionLabel = new System.Windows.Forms.Label();
             this.ResetButton = new System.Windows.Forms.Button();
+            this.LinkToolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.TextBoxErrorProvider)).BeginInit();
             this.ModifiersGroupBox.SuspendLayout();
             this.TrayContextMenu.SuspendLayout();
@@ -62,6 +66,7 @@ namespace ProcessMash.UI
             this.KeysTabPage.SuspendLayout();
             this.OtherTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SecondsUntilKilledNumeric)).BeginInit();
+            this.AboutTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // KeyTextbox
@@ -303,12 +308,47 @@ namespace ProcessMash.UI
             // 
             // AboutTabPage
             // 
+            this.AboutTabPage.Controls.Add(this.GithubLinkLabel);
+            this.AboutTabPage.Controls.Add(this.CreatorLabel);
+            this.AboutTabPage.Controls.Add(this.VersionLabel);
             this.AboutTabPage.Location = new System.Drawing.Point(4, 22);
             this.AboutTabPage.Name = "AboutTabPage";
             this.AboutTabPage.Size = new System.Drawing.Size(336, 127);
             this.AboutTabPage.TabIndex = 2;
             this.AboutTabPage.Text = "About";
             this.AboutTabPage.UseVisualStyleBackColor = true;
+            // 
+            // GithubLinkLabel
+            // 
+            this.GithubLinkLabel.AutoSize = true;
+            this.GithubLinkLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.GithubLinkLabel.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.GithubLinkLabel.Location = new System.Drawing.Point(149, 80);
+            this.GithubLinkLabel.Name = "GithubLinkLabel";
+            this.GithubLinkLabel.Size = new System.Drawing.Size(38, 13);
+            this.GithubLinkLabel.TabIndex = 2;
+            this.GithubLinkLabel.TabStop = true;
+            this.GithubLinkLabel.Text = "Github";
+            this.GithubLinkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.GithubLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.GithubLinkLabel_LinkClicked);
+            // 
+            // CreatorLabel
+            // 
+            this.CreatorLabel.AutoSize = true;
+            this.CreatorLabel.Location = new System.Drawing.Point(120, 57);
+            this.CreatorLabel.Name = "CreatorLabel";
+            this.CreatorLabel.Size = new System.Drawing.Size(97, 13);
+            this.CreatorLabel.TabIndex = 1;
+            this.CreatorLabel.Text = "©2020 MIDARE16";
+            // 
+            // VersionLabel
+            // 
+            this.VersionLabel.AutoSize = true;
+            this.VersionLabel.Location = new System.Drawing.Point(144, 34);
+            this.VersionLabel.Name = "VersionLabel";
+            this.VersionLabel.Size = new System.Drawing.Size(49, 13);
+            this.VersionLabel.TabIndex = 0;
+            this.VersionLabel.Text = "v.1.0.0.0";
             // 
             // ResetButton
             // 
@@ -354,6 +394,8 @@ namespace ProcessMash.UI
             this.OtherTabPage.ResumeLayout(false);
             this.OtherTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SecondsUntilKilledNumeric)).EndInit();
+            this.AboutTabPage.ResumeLayout(false);
+            this.AboutTabPage.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -381,5 +423,9 @@ namespace ProcessMash.UI
         private System.Windows.Forms.CheckBox MinimizeCheckbox;
         private System.Windows.Forms.NumericUpDown SecondsUntilKilledNumeric;
         private System.Windows.Forms.Label SecondsUntilKliledLabel;
+        private LinkLabel GithubLinkLabel;
+        private Label CreatorLabel;
+        private Label VersionLabel;
+        private ToolTip LinkToolTip;
     }
 }

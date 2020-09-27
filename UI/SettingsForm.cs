@@ -57,6 +57,7 @@ namespace ProcessMash.UI
         #endregion
 
         #region Events
+        #region Events-Form
         private void Settings_Load(object sender, EventArgs e)
         {
             CheckIfAlreadyRunning();
@@ -75,57 +76,6 @@ namespace ProcessMash.UI
 
             if (MinimizeCheckbox.Checked) MoveToTray();
         }
-
-        private void SaveButton_Click(object sender, EventArgs e)
-        {
-            Cursor.Current = Cursors.WaitCursor;
-
-            switch (RegisterHotKey())
-            {
-                case HotkeyRegistered.Success:
-                    SetChangeFlag(false);
-                    break;
-                case HotkeyRegistered.NotSpecified:
-                    SetError();
-                    return;
-                case HotkeyRegistered.AlreadyTaken:
-                    return;
-                default:
-                    throw new InvalidEnumArgumentException();
-            }
-
-            Settings.Default.Modifiers = GetModifierCheckBoxes().ToArray();
-            Settings.Default.Key = (int)KeyTextbox.Text.ToKey();
-            Settings.Default.MinimizeOnStartup = MinimizeCheckbox.Checked;
-            Settings.Default.SecondsUntilKilled = (int)SecondsUntilKilledNumeric.Value;
-            Settings.Default.Save();
-            Settings.Default.Reload();
-        }
-
-        private void ResetButton_Click(object sender, EventArgs e)
-        {
-            Cursor.Current = Cursors.WaitCursor;
-
-            LoadConfig();
-            SetChangeFlag(false);
-        }
-
-        private void ExitButton_Click(object sender, EventArgs e)
-        {
-            Cursor.Current = Cursors.WaitCursor;
-            CloseForm();
-        }
-
-        private void KeyTextbox_TextChanged(object sender, EventArgs e)
-        {
-            TextBoxErrorProvider.Clear();
-            KeyTextbox.SelectionStart = KeyTextbox.Text.Length;
-
-            SetChangeFlag(true);
-        }
-
-        private void SecondsUntilKilledNumeric_Enter(object sender, EventArgs e)
-            => SecondsUntilKilledNumeric.Select(0, SecondsUntilKilledNumeric.Text.Length);
 
         private void SettingsForm_ValuesChanged(object sender, EventArgs e)
             => SetChangeFlag(true);
@@ -165,7 +115,74 @@ namespace ProcessMash.UI
             e.Cancel = true;
             MoveToTray();
         }
+        #endregion
 
+        #region Events-MainButtons
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            switch (RegisterHotKey())
+            {
+                case HotkeyRegistered.Success:
+                    SetChangeFlag(false);
+                    break;
+                case HotkeyRegistered.NotSpecified:
+                    SetError();
+                    return;
+                case HotkeyRegistered.AlreadyTaken:
+                    return;
+                default:
+                    throw new InvalidEnumArgumentException();
+            }
+
+            Settings.Default.Modifiers = GetModifierCheckBoxes().ToArray();
+            Settings.Default.Key = (int)KeyTextbox.Text.ToKey();
+            Settings.Default.MinimizeOnStartup = MinimizeCheckbox.Checked;
+            Settings.Default.SecondsUntilKilled = (int)SecondsUntilKilledNumeric.Value;
+            Settings.Default.Save();
+            Settings.Default.Reload();
+        }
+
+        private void ResetButton_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            LoadConfig();
+            SetChangeFlag(false);
+        }
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            CloseForm();
+        }
+        #endregion
+
+        #region Events-KeysTabPage
+        private void KeyTextbox_TextChanged(object sender, EventArgs e)
+        {
+            TextBoxErrorProvider.Clear();
+            KeyTextbox.SelectionStart = KeyTextbox.Text.Length;
+
+            SetChangeFlag(true);
+        }
+
+        private void SecondsUntilKilledNumeric_Enter(object sender, EventArgs e)
+            => SecondsUntilKilledNumeric.Select(0, SecondsUntilKilledNumeric.Text.Length);
+        #endregion
+
+        #region Events-AboutTabPage
+        private void GithubLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            Process.Start($"https://www.github.com/midare160/{Application.ProductName}");
+            GithubLinkLabel.LinkVisited = true;
+        }
+        #endregion
+
+        #region Events-TrayContextMenu
         private void TrayNotification_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -179,6 +196,7 @@ namespace ProcessMash.UI
 
         private void ExitContextMenuItem_Click(object sender, EventArgs e)
             => CloseForm();
+        #endregion
         #endregion
 
         #region Private Procedures
