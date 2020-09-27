@@ -68,6 +68,7 @@ namespace ProcessMash.UI
 
                 LoadConfig();
                 RegisterHotKey();
+                LinkToolTip.SetToolTip(GithubLinkLabel, $"https://www.github.com/midare160/{Application.ProductName}");
             }
             finally
             {

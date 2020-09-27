@@ -17,9 +17,7 @@ namespace ProcessMash
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 
-            // TODO enable event handlers
             Application.ThreadException += (s, e) => Logger.Error(e.Exception);
             AppDomain.CurrentDomain.UnhandledException += (s, e) => Logger.Error((Exception)e.ExceptionObject);
 
