@@ -83,12 +83,9 @@ namespace ProcessMash.UI
 
         private void SettingsForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (this.ActiveControl == KeyTextbox)
+            if (this.ActiveControl == KeyTextbox && e.Modifiers == Keys.None)
             {
-                if (e.Modifiers == Keys.None)
-                {
-                    KeyTextbox.Text = e.KeyCode.ToString();
-                }
+                KeyTextbox.Text = e.KeyCode.ToString();
             }
             else if (e.KeyCode == Keys.Escape)
             {
@@ -217,6 +214,13 @@ namespace ProcessMash.UI
 
         private void LoadConfig()
         {
+            if (Settings.Default.UpgradeRequired)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.UpgradeRequired = false;
+                Settings.Default.Save(true);
+            }
+
             MinimizeCheckbox.Checked = Settings.Default.MinimizeOnStartup;
             SecondsUntilKilledNumeric.Value = Settings.Default.SecondsUntilKilled;
 

@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="src\ContextMenu\ContextMenuColorTable.cs" />
     <Compile Include="src\ContextMenu\ContextMenuRenderer.cs" />
+    <Compile Include="src\Extensions\SettingsExtensions.cs" />
     <Compile Include="src\Tools\Enums.cs" />
     <Compile Include="src\Extensions\FormExtensions.cs" />
     <Compile Include="src\Extensions\StringExtensions.cs" />
