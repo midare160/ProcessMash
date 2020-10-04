@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Media;
 using System.Windows.Forms;
@@ -60,7 +59,17 @@ namespace ProcessMash.UI
         #region Events-Form
         private void Settings_Load(object sender, EventArgs e)
         {
-            CheckIfAlreadyRunning();
+            if (Process.GetProcessesByName(Application.ProductName).Length > 1)
+            {
+                MessageBox.Show(
+                    "Application is already running!",
+                    "Error!",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                Application.Exit();
+                return;
+            }
 
             try
             {
@@ -110,6 +119,8 @@ namespace ProcessMash.UI
 
         private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (e.CloseReason == CloseReason.ApplicationExitCall || e.CloseReason == CloseReason.WindowsShutDown) return;
+
             e.Cancel = true;
             MoveToTray();
         }
@@ -138,8 +149,7 @@ namespace ProcessMash.UI
             Settings.Default.Key = (int)KeyTextbox.Text.ToKey();
             Settings.Default.MinimizeOnStartup = MinimizeCheckbox.Checked;
             Settings.Default.SecondsUntilKilled = (int)SecondsUntilKilledNumeric.Value;
-            Settings.Default.Save();
-            Settings.Default.Reload();
+            Settings.Default.Save(true);
         }
 
         private void ResetButton_Click(object sender, EventArgs e)
@@ -198,20 +208,6 @@ namespace ProcessMash.UI
         #endregion
 
         #region Private Procedures
-        private void CheckIfAlreadyRunning()
-        {
-            if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Application.ExecutablePath)).Length > 1)
-            {
-                MessageBox.Show(
-                    "Application is already running!",
-                    "Error!",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
-                this.Dispose(true);
-            }
-        }
-
         private void LoadConfig()
         {
             if (Settings.Default.UpgradeRequired)
@@ -317,7 +313,7 @@ namespace ProcessMash.UI
             }
 
             _hotkeys.Unregister(this.Handle);
-            this.Dispose(true);
+            Application.Exit();
         }
         #endregion
     }
